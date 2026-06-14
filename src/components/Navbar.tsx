@@ -4,6 +4,7 @@ import Link from 'next/link'
 import CartIcon from './CartIcon'
 // import { PhoneIcon } from '@phosphor-icons/react'
 import { Phone } from 'lucide-react';
+import UserLink from './UserLink';
 
 
 const Navbar = () => {
@@ -34,9 +35,7 @@ const Navbar = () => {
           <Phone/>
           <span>+91 982 2343 xxxx</span>
         </div>
-        {!user? <Link href="/">Login</Link> :
-        <Link href="/orders">Order</Link>
-        }
+        <UserLink/>
         <CartIcon/>
       </div>
     </div>
