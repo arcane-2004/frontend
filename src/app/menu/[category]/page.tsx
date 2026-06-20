@@ -15,20 +15,13 @@ const page = async ({params}: Props) => {
             cache: 'no-store'
         })
 
-        console.log("Status:", res.status);
-
-        if (!res.ok) {
-            const text = await res.text();
-            console.log(text);
-            throw new Error("Failed");
-        }
-
         return res.json()
     }
 
     const {category} = await params
-
+    console.log('categories:', category)
     const products: ProductType[] = await getData(category);
+    console.log("products", products)
   return (
     <div className='flex flex-wrap text-[#D49A89]'> 
         {products.map(item => (

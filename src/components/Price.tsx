@@ -1,21 +1,18 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import { ProductType } from '@/types/types';
+import React, { useState } from 'react'
 
-type Props = {
-    price: number;
-    id: number;
-    options?: {title: string; additionalPrice: number}[]
-}
-
-const Price = ({price, id, options}: Props) => {
+const Price = ({product}: {product: ProductType}) => {
 
     // const [total, setTotal] = useState(price);
     const [quantity, setQuantity] = useState(1);
     const [selected, setSelected] = useState(0);
 
-
-    const total = quantity * (options ? price+options[selected].additionalPrice : price )
-
+    let total = 0;
+    if(product.options?.length){
+       total = quantity * (Number(product.price)+product.options[selected].additionalPrice )
+    }
+    
 
   return (
     <div className='flex flex-col gap-4'>
@@ -23,8 +20,8 @@ const Price = ({price, id, options}: Props) => {
 
       {/* option container */}
       <div className='flex gap-4'>
-        {options?.map((option, index) => (
-            <button key={option.title} className=' w-min-[6rem ] p-2 ring-1 ring-[#557571] rounded-md'
+        {product.options?.length && product.options?.map((option, index) => (
+            <button key={option.title} className=' w-[6rem] p-2 ring-1 ring-[#557571] rounded-md'
             style={{
                 backgroundColor: selected === index ? "#557571" : "white",
                 color: selected === index ? "white" : "#D49A89"
