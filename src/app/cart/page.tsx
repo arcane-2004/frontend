@@ -10,12 +10,13 @@ const CartPage = () => {
     return (
         <div className='h-[calc(100vh-6rem)] h-[calc(100vh - 9rem)] flex flex-col text-[#D49A89] lg:flex-row'>
             {/* product container */}
-            {products.map(item => (
-                <div key={item.id}
-                    className='h-1/2 p-4 flex flex-col justify-center overflow-auto lg:h-full lg:w-2/3 xl:w-1/2 md:px-20 xl:px-40'>
-                    {/* single item */}
 
-                    <div className='flex items-center justify-between mb-4 '>
+            <div
+                className='h-1/2 p-4 flex flex-col justify-center overflow-auto lg:h-full lg:w-2/3 xl:w-1/2 md:px-20 xl:px-40'>
+                {/* single item */}
+                {products.map(item => (
+                    <div key={item.id}
+                        className='flex items-center justify-between mb-4 '>
                         {item.img &&
                             <Image src={item.img} alt='' className='object-contain' width={100} height={100} />
                         }
@@ -26,8 +27,9 @@ const CartPage = () => {
                         <h2 className='font-bold'>₹{item.price}</h2>
                         <span className='cursor-pointer' onClick={() => removeFromCart(item)}>X</span>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
+
             {/* payment container */}
             <div className='h-1/2 p-4 bg-[#F4F4F4] flex flex-col gap-4 justify-center lg:h-full lg:w-1/3 xl:w-1/2 md:px-20 xl:px-40 xl:text-xl xl:gap-6'>
                 <div className='flex justify-between'>
