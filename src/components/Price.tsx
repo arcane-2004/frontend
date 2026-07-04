@@ -1,18 +1,37 @@
 "use client"
 import { ProductType } from '@/types/types';
-import React, { useState } from 'react'
+import { useCartStore } from '@/utils/store';
+import React, { useEffect, useState } from 'react'
+import {toast} from "react-toastify"
 
-const Price = ({product}: {product: ProductType}) => {
+const Price = ({ product }: { product: ProductType }) => {
 
-    // const [total, setTotal] = useState(price);
-    const [quantity, setQuantity] = useState(1);
-    const [selected, setSelected] = useState(0);
+  // const [total, setTotal] = useState(price);
+  const [quantity, setQuantity] = useState(1);
+  const [selected, setSelected] = useState(0);
 
-    let total = 0;
-    if(product.options?.length){
-       total = quantity * (Number(product.price)+product.options[selected].additionalPrice )
-    }
-    
+  let total = 0;
+  if (product.options?.length) {
+    total = quantity * (Number(product.price) + product.options[selected].additionalPrice)
+  }
+
+  useEffect(() => {
+    useCartStore.persist.rehydrate()
+  },[])
+
+  const { addToCart } = useCartStore();
+  const handleCart = () => {
+    addToCart({
+      id: product.id,
+      title: product.title,
+      img: product.img,
+      price: total,
+      ...(product.options?.length && {optionTitle: product.options[selected].title}),
+      quantity: quantity
+    })
+
+    toast.success("prodect added to the cart!")    
+  }
 
   return (
     <div className='flex flex-col gap-4'>
@@ -21,32 +40,33 @@ const Price = ({product}: {product: ProductType}) => {
       {/* option container */}
       <div className='flex gap-4'>
         {product.options?.length && product.options?.map((option, index) => (
-            <button key={option.title} className=' w-[6rem] p-2 ring-1 ring-[#557571] rounded-md'
+          <button key={option.title} className=' w-[6rem] p-2 ring-1 ring-[#557571] rounded-md'
             style={{
-                backgroundColor: selected === index ? "#557571" : "white",
-                color: selected === index ? "white" : "#D49A89"
+              backgroundColor: selected === index ? "#557571" : "white",
+              color: selected === index ? "white" : "#D49A89"
             }}
             onClick={() => setSelected(index)}
-            >
-                {option.title}
-            </button>
+          >
+            {option.title}
+          </button>
         ))}
       </div>
       {/* quantity and add button container */}
       <div className='flex justify-between items-center'>
         {/* quantity */}
         <div className='flex justify-between w-full ring-1 ring-[#557571] p-3'>
-            <span >Qantity</span>
-            <div className='flex gap-4 items-center'>
-                <button onClick={() => setQuantity(prev => (prev>1 ? prev-1 : 1))}> {'<'} </button>
-                <span>{quantity}</span>
-                <button onClick={() => setQuantity(prev => (prev<9 ? prev+1 : 9))}> {'>'} </button>
-            </div>
+          <span >Qantity</span>
+          <div className='flex gap-4 items-center'>
+            <button onClick={() => setQuantity(prev => (prev > 1 ? prev - 1 : 1))}> {'<'} </button>
+            <span>{quantity}</span>
+            <button onClick={() => setQuantity(prev => (prev < 9 ? prev + 1 : 9))}> {'>'} </button>
+          </div>
         </div>
         {/* cart button */}
-        <button className='uppercase w-56 bg-[#557571] text-white p-3 ring-1 ring-[#557571]'>Add to Cart</button>
+        <button onClick={handleCart}
+          className='uppercase w-56 bg-[#557571] text-white p-3 ring-1 ring-[#557571] cursor-pointer'>Add to Cart</button>
       </div>
-    </div>
+    </div >
   )
 }
 
